@@ -25,6 +25,6 @@ describe("Testing o page login", () => {
         expect(loginBtn).toBeEnabled();
 
         userEvent.click(loginBtn);
-        expect(history.location.pathname).toBe("/comidas");
+        expect(history.location.pathname).toBe("/foods");
     })
 })
