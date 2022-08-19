@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 
 export default function Header({ title, haveSearch }) {
+  const history = useHistory();
+
+  function handleProfileClick() {
+    history.push('/profile');
+  }
+
   return (
     <header className="header">
       <button
         type="button"
+        onClick={ handleProfileClick }
         className="buttonHeader"
       >
         <img
