@@ -12,7 +12,6 @@ function Login() {
     const { email, password } = user;
     const isValidEmail = REGEX_EMAIL.test(email);
     const isValidPassword = password.length > MIN_PASSWORD_LENGTH;
-    console.log(isValidEmail, isValidPassword);
     if (isValidEmail && isValidPassword) {
       setToggleBtnLogin(false);
     } else {
