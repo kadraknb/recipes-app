@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 
 export default function Profile() {
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setEmail(user.email);
+    }
+  }, []);
+
   return (
     <main>
       <Header title="Profile" />
       <h1>Profile page</h1>
-      <h3 data-testid="profile-email">email@email.com</h3>
+      <h3 data-testid="profile-email">{email}</h3>
 
       <div>
         <button
