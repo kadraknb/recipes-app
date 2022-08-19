@@ -1,10 +1,9 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Drinks from '../pages/Drinks';
-import Foods from '../pages/Foods';
-import renderWithContext from './Helpers/renderWithContext'
-import Profile from '../pages/Profile';
+import renderWithContext from './helpers/renderWithContext'
+import { Drinks, Profile } from '../pages';
+import Foods from '../pages/foods';
 
 describe('Testes do componente Footer', () => {
   it('Footer aparece na pagina /drinks', () => {
