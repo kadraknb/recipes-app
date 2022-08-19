@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import AppContext from '../context/AppContext';
+import AppContext from '../../context/AppContext';
 
 const REGEX_EMAIL = /\S+@\S+\.\S+/;
 const MIN_PASSWORD_LENGTH = 6;
