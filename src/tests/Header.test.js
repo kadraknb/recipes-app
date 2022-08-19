@@ -2,9 +2,7 @@ import React from 'react';
 import App from '../App';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderWithRouter from '../helpers/renderWithRouter';
-
-
+import renderWithRouter from './helpers/renderWithRouter';
 
 describe('Testes para o componente Header.js', () => {
 

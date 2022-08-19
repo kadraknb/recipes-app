@@ -29,22 +29,26 @@ export default function Header({ title, haveSearch }) {
       </button>
       <h1 data-testid="page-title">{ title }</h1>
       { haveSearch && (
-        <button
-          type="button"
-          data-testid="search-input"
-          onClick={ () => setIsSearchVisible((prevState) => !prevState) }
-          className="buttonHeader"
-        >
-          <img
-            src={ searchIcon }
-            alt="profile icon"
-            data-testid="search-top-btn"
-          />
-        </button>
+        <div>
+
+          <button
+            type="button"
+            data-testid="search-input"
+            onClick={ () => setIsSearchVisible((prevState) => !prevState) }
+            className="buttonHeader"
+          >
+            <img
+              src={ searchIcon }
+              alt="profile icon"
+              data-testid="search-top-btn"
+            />
+          </button>
+          <div className="">
+            { isSearchVisible && <SearchBar /> }
+          </div>
+        </div>
       )}
-      <div className="">
-        { isSearchVisible && <SearchBar />}
-      </div>
+
     </header>
   );
 }
