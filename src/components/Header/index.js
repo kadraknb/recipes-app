@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
+// trocar a importação do SearchBar, se necessário
+import SearchBar from '../SearchBar/SearchBar';
 
 export default function Header({ title, haveSearch }) {
   const history = useHistory();
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   function handleProfileClick() {
     history.push('/profile');
@@ -28,6 +31,8 @@ export default function Header({ title, haveSearch }) {
       { haveSearch && (
         <button
           type="button"
+          data-testid="search-input"
+          onClick={ () => setIsSearchVisible((prevState) => !prevState) }
           className="buttonHeader"
         >
           <img
@@ -37,6 +42,9 @@ export default function Header({ title, haveSearch }) {
           />
         </button>
       )}
+      <div className="">
+        { isSearchVisible && <SearchBar />}
+      </div>
     </header>
   );
 }
