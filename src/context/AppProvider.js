@@ -3,12 +3,13 @@ import { node } from 'prop-types';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
+  const [recipes, setRecipes] = useState([{}]);
+  const [toggleBtnLogin, setToggleBtnLogin] = useState(true);
   const [user, setUser] = useState({
     email: '',
     password: '',
   });
-  const [toggleBtnLogin, setToggleBtnLogin] = useState(true);
-  const value = { user, setUser, toggleBtnLogin, setToggleBtnLogin };
+  const value = { user, setUser, toggleBtnLogin, setToggleBtnLogin, recipes, setRecipes };
   return (
     <AppContext.Provider
       value={ value }
