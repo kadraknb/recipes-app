@@ -30,33 +30,41 @@ function Login() {
     history.push('/foods');
   }
   return (
-    <div>
-      <h1>Login</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        data-testid="email-input"
-        name="email"
-        onChange={ handleChange }
-        id=""
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        data-testid="password-input"
-        onChange={ handleChange }
-        name="password"
-        id=""
-      />
-      <button
-        type="button"
-        disabled={ toggleBtnLogin }
-        onClick={ handleClick }
-        data-testid="login-submit-btn"
-      >
-        Enter
+    <div
+      className="d-flex flex-column mb-3 align-items-center
+    "
+    >
+      <h1 className="h1">Login</h1>
+      <form action="" className="d-flex flex-column mb-3 align-items-center">
+        <input
+          className="form-control"
+          type="email"
+          placeholder="Email"
+          data-testid="email-input"
+          name="email"
+          onChange={ handleChange }
+          id=""
+        />
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Password"
+          data-testid="password-input"
+          onChange={ handleChange }
+          name="password"
+          id=""
+        />
+        <button
+          type="button"
+          className="btn btn-light"
+          disabled={ toggleBtnLogin }
+          onClick={ handleClick }
+          data-testid="login-submit-btn"
+        >
+          Enter
 
-      </button>
+        </button>
+      </form>
     </div>
   );
 }
