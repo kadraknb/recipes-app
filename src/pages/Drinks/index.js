@@ -3,7 +3,7 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import Recipes from '../../components/Recipes';
 
-export default function Foods() {
+export default function Drinks() {
   return (
     <main className="">
       <Header title="Drinks" haveSearch />
