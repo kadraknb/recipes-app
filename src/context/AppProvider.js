@@ -14,13 +14,14 @@ function AppProvider({ children }) {
   const [categoriesDrinks, setCategoriesDrinks] = useState([]);
 
   // page Login
-  const [recipes, setRecipes] = useState([{}]);
   const [toggleBtnLogin, setToggleBtnLogin] = useState(true);
-
   const [user, setUser] = useState({
     email: '',
     password: '',
   });
+
+  // component SearchBar
+  const [recipes, setRecipes] = useState([{}]);
 
   const value = { user,
     setUser,
