@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import AppContext from '../../context/AppContext';
 import getSearchApi from '../../services/getSearchApi';
@@ -9,14 +9,16 @@ function SearchBar() {
   const [searchFor, setSearchFor] = useState('');
   const { recipes, setRecipes } = useContext(AppContext);
   const history = useHistory();
-  const pageDrinks = window.location.pathname === '/drinks';
+  const location = useLocation();
+  const pageDrinks = location.pathname === '/drinks';
+  const SearchFor = pageDrinks ? 'Drink' : 'Meal';
   const LIMIT = 12;
 
-  const autoDirection = (meals) => {
+  const autoDirection = (res) => {
+    setRecipes(res);
     const newRoute = pageDrinks
-      ? `/drinks/${meals[0].idMeal}`
-      : `/foods/${meals[0].idMeal}`;
-    setRecipes(meals);
+      ? `/drinks/${res[0][`id${SearchFor}`]}`
+      : `/foods/${res[0][`id${SearchFor}`]}`;
     history.push(newRoute);
   };
 
@@ -26,20 +28,20 @@ function SearchBar() {
     if (searchFor === 'f' && search.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else {
-      const { meals } = await getSearchApi({
+      const res = Object.values(await getSearchApi({
         type: searchFor === 'i' ? 'filter' : 'search',
         searchFor,
         search,
         pageDrinks,
-      });
-      if (!meals) {
+      }))[0];
+      if (!res) {
         global.alert('Sorry, we haven\'t found any recipes for these filters.');
         return;
       }
-      const result = meals.length === 1
+      const result = res.length === 1
         ? autoDirection
         : setRecipes;
-      result(meals);
+      result(res);
     }
   };
 
@@ -51,7 +53,7 @@ function SearchBar() {
           name="Search"
           value={ search }
           onChange={ (e) => setSearch(e.target.value) }
-          data-testid="ingredient-search-radio"
+          data-testid="search-input"
         />
         <label htmlFor="Search">
           <input
@@ -59,7 +61,7 @@ function SearchBar() {
             name="Search"
             value="i"
             onChange={ (e) => setSearchFor(e.target.value) }
-            data-testid="search-input"
+            data-testid="ingredient-search-radio"
           />
           Ingredient
         </label>
@@ -87,22 +89,25 @@ function SearchBar() {
           busca
         </button>
       </form>
-      {/* temporario VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ou nao */}
-      { recipes.length > 1 && (
+      {recipes.length > 1 && (
         <ul>
           {recipes.slice(0, LIMIT).map((aa, index) => (
-            <li key={ aa.idMeal } data-testid={ `${index}-recipe-card` }>
+            <li
+              key={ aa[`id${SearchFor}`] }
+              data-testid={ `${index}-recipe-card` }
+            >
               <img
-                src={ aa.strMealThumb }
+                src={ aa[`str${SearchFor}Thumb`] }
                 alt={ aa.strCategory }
                 data-testid={ `${index}-card-img` }
               />
-              <p data-testid={ `${index}-card-name` }>{aa.strMeal}</p>
+              <p data-testid={ `${index}-card-name` }>
+                {aa[`str${SearchFor}`]}
+              </p>
             </li>
           ))}
-        </ul>)}
-      {/* temporario ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */}
-
+        </ul>
+      )}
     </>
   );
 }

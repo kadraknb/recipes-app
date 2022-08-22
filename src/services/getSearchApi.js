@@ -14,3 +14,5 @@ export default getSearchApi;
 // https://www.thecocktaildb.com/api/json/v1/1/filter.php?i={ingrediente}
 // https://www.thecocktaildb.com/api/json/v1/1/search.php?s={nome}
 // https://www.thecocktaildb.com/api/json/v1/1/search.php?f={primeira-letra}
+// www.thecocktaildb.com/api/json/v1/1/search.php?i=vodka
+// www.thecocktaildb.com/api/json/v1/1/search.php?s=vodka
