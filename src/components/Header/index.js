@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 // trocar a importação do SearchBar, se necessário
-// import SearchBar from '../SearchBar/SearchBar';
+import SearchBar from '../SearchBar';
 
 export default function Header({ title, haveSearch }) {
   const history = useHistory();
@@ -43,8 +44,9 @@ export default function Header({ title, haveSearch }) {
               data-testid="search-top-btn"
             />
           </button>
+          <SearchBar />
           <div className="">
-            {/* { isSearchVisible && <SearchBar /> } */}
+            {/* { isSearchVisible && <SearchBar /> }X */}
           </div>
         </div>
       )}
