@@ -12,12 +12,13 @@ describe("testando o componente SearchBar", () => {
     const { history } = renderWithContext(<App />)
     history.push('/foods')
   
+    userEvent.click(screen.getByTestId('search-top-btn'))
     const inputSearch = screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' )
     const ingredientSearchRadio = screen.getByTestId('ingredient-search-radio')
     const nameSearchRadio = screen.getByTestId('name-search-radio')
     const firstLetterSearchRadio = screen.getByTestId('first-letter-search-radio')
     const execSearchBtn = screen.getByTestId('exec-search-btn')
-    
+
     expect(inputSearch).toBeInTheDocument();
     expect(ingredientSearchRadio).toBeInTheDocument();
     expect(nameSearchRadio).toBeInTheDocument();
@@ -30,7 +31,7 @@ describe("testando o componente SearchBar", () => {
     history.push('/foods')
 
     fetchMock(3)
-
+    userEvent.click(screen.getByTestId('search-top-btn'))
     userEvent.click(screen.getByTestId('ingredient-search-radio'))
     userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'banana')
     userEvent.click(screen.getByTestId('exec-search-btn'))
@@ -41,6 +42,7 @@ describe("testando o componente SearchBar", () => {
     history.push('/foods')
 
     fetchMock(1)
+    userEvent.click(screen.getByTestId('search-top-btn'))
     userEvent.click(screen.getByTestId('name-search-radio'))
     userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'Banana Pancakes')
     userEvent.click(screen.getByTestId('exec-search-btn'))
@@ -51,7 +53,7 @@ describe("testando o componente SearchBar", () => {
     history.push('/foods')
 
     fetchMock(2)
-
+    userEvent.click(screen.getByTestId('search-top-btn'))
     userEvent.click(screen.getByTestId('first-letter-search-radio'))
     userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'C')
     userEvent.click(screen.getByTestId('exec-search-btn'))
@@ -62,6 +64,7 @@ describe("testando o componente SearchBar", () => {
     history.push('/foods')
     global.alert = jest.fn();
 
+    userEvent.click(screen.getByTestId('search-top-btn'))
     userEvent.click(screen.getByTestId('first-letter-search-radio'))
     userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'Banana Pancakes')
     userEvent.click(screen.getByTestId('exec-search-btn'))
@@ -73,6 +76,7 @@ describe("testando o componente SearchBar", () => {
     global.alert = jest.fn();
     fetchMock(0)
 
+    userEvent.click(screen.getByTestId('search-top-btn'))
     userEvent.click(screen.getByTestId('ingredient-search-radio'))
     userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'aasdasdasdas')
     userEvent.click(screen.getByTestId('exec-search-btn'))
@@ -83,8 +87,9 @@ describe("testando o componente SearchBar", () => {
     const { history } = renderWithContext(<Drinks />)
     const urlDrink = '/foods/52939'
     fetchMock(1, 'drinks')
-    userEvent.click(screen.getByTestId('drinks-bottom-btn'))
     
+    userEvent.click(screen.getByTestId('search-top-btn'))
+    userEvent.click(screen.getByTestId('drinks-bottom-btn'))
     userEvent.click(screen.getByTestId('name-search-radio'))
     userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'Banana drink')
     userEvent.click(screen.getByTestId('exec-search-btn'))
