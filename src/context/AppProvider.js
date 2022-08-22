@@ -3,7 +3,6 @@ import { node } from 'prop-types';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
-
   // component Recipes
   const [recipesMeals, setRecipesMeals] = useState([]);
   const [filterControl, setFilterControl] = useState({
@@ -38,7 +37,7 @@ function AppProvider({ children }) {
     filterControl,
     setFilterControl,
     recipes,
-    setRecipes
+    setRecipes,
   };
 
   return (
