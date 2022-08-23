@@ -1,17 +1,20 @@
 import React from "react";
-import { screen, waitFor } from "@testing-library/react";
+import { findByLabelText, findByTestId, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import renderWithContext from "./helpers/renderWithContext";
 import App from "../App";
-import fetchMock from "./helpers/fetchMock";
+import {fetchMock, drinksMock} from "./helpers/fetchMock";
+import { act } from 'react-dom/test-utils';
 import { Drinks } from "../pages";
+import { categoriesDrinksMock, categoriesMealsMock, recipesDrinksMock, recipesMealsMock } from "./mocks/RecipeMocks";
 
 
 describe("testando o componente SearchBar", () => {
+  afterEach(() => jest.resetAllMocks());
   it('se os input eo button do SearchBar esta renderizando', () => {
     const { history } = renderWithContext(<App />)
     history.push('/foods')
-  
+
     userEvent.click(screen.getByTestId('search-top-btn'))
     const inputSearch = screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' )
     const ingredientSearchRadio = screen.getByTestId('ingredient-search-radio')
@@ -86,13 +89,26 @@ describe("testando o componente SearchBar", () => {
   it('Na tela de bebidas, se o radio selecionado for Name, a busca na API é feita corretamente pelo nome', async () => {
     const { history } = renderWithContext(<Drinks />)
     const urlDrink = '/foods/52939'
-    fetchMock(1, 'drinks')
-    
-    userEvent.click(screen.getByTestId('search-top-btn'))
-    userEvent.click(screen.getByTestId('drinks-bottom-btn'))
-    userEvent.click(screen.getByTestId('name-search-radio'))
-    userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'Banana drink')
-    userEvent.click(screen.getByTestId('exec-search-btn'))
+    fetch = jest.fn().mockImplementationOnce(() => Promise.resolve({
+            json: () => Promise.resolve(recipesDrinksMock)
+        })).mockImplementationOnce(() => Promise.resolve({
+            json: () => Promise.resolve(categoriesDrinksMock)
+        })).mockImplementationOnce(() => Promise.resolve({
+            json: () => Promise.resolve(drinksMock)
+        }))
+
+    await act( async () => {
+      // userEvent.click(screen.getByTestId('drinks-bottom-btn'))
+      userEvent.click(screen.getByTestId('search-top-btn'))
+      const bntRadio = await screen.findByTestId('name-search-radio')
+      userEvent.click(bntRadio);
+      userEvent.type(screen.getAllByTestId('search-input').find((aa) => aa.name === 'Search' ), 'Vodka')
+      userEvent.click(screen.getByTestId('exec-search-btn'))
+    })
+    expect(fetch).toBeCalledTimes(1);
+    history.push('/drinks/16967')
     await waitFor(() =>  expect(history.location.pathname).toBe('/drinks/16967'), 500 )
   })
+
+
 })

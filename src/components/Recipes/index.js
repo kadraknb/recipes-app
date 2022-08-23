@@ -12,11 +12,11 @@ function Recipes() {
     categoriesMeals, setCategoriesMeals,
     categoriesDrinks, setCategoriesDrinks,
     filterControl, setFilterControl,
+    recipeFiltered, setRecipeFiltered,
   } = useContext(AppContext);
   const history = useHistory();
   const { pathname } = history.location;
 
-  const [recipeFiltered, setRecipeFiltered] = useState([]);
   const [categories, setCategories] = useState([]);
 
   const clearFilter = () => {
