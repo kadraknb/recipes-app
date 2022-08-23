@@ -1,7 +1,7 @@
 
 
 
-const fetchMock = (quantidade = 0, qual = 'meals') => {
+export const fetchMock = (quantidade = 0, qual = 'meals') => {
   const resApi = {
     meals: [
       {
@@ -45,4 +45,13 @@ const fetchMock = (quantidade = 0, qual = 'meals') => {
     });
   };
 };
-export default fetchMock
+
+export const drinksMock = {
+  drinks: [
+      {
+        strDrink: "Vodka Fizz",
+        idDrink: "16967",
+        strDrinkThumb: "https://www.thecocktaildb.com/images/media/drink/xwxyux1441254243.jpg",
+      },
+    ]
+}

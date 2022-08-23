@@ -12,6 +12,7 @@ function AppProvider({ children }) {
   const [recipesDrinks, setRecipesDrinks] = useState([]);
   const [categoriesMeals, setCategoriesMeals] = useState([]);
   const [categoriesDrinks, setCategoriesDrinks] = useState([]);
+  const [recipeFiltered, setRecipeFiltered] = useState([]);
 
   // page Login
   const [toggleBtnLogin, setToggleBtnLogin] = useState(true);
@@ -39,6 +40,8 @@ function AppProvider({ children }) {
     setFilterControl,
     recipes,
     setRecipes,
+    recipeFiltered,
+    setRecipeFiltered,
   };
 
   return (
