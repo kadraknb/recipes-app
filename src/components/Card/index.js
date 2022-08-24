@@ -19,8 +19,8 @@ function Card({ recipe, index, pathname, recipeId }) {
     <div
       role="button"
       tabIndex={ 0 }
-      data-testid={ `${index}-recipe-card` }
       onKeyDown={ toOtherPage }
+      data-testid={ `${index}-recipe-card` }
       onClick={ () => toOtherPage(recipeId) }
       className="container flex-column d-flex align-items-center"
 

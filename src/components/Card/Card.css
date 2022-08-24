@@ -5,3 +5,14 @@
   object-fit: cover;
   width: 340px;
 }
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+}
+
+.gap {
+  gap: 5px;
+}
