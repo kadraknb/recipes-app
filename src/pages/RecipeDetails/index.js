@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import copy from 'clipboard-copy';
 
 import { getRecipeApi, getRecomendationApi } from '../../services/getRecipeApi';
@@ -10,11 +11,10 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 function RecipeDetails(props) {
-  console.log(props);
   const history = useHistory();
   const location = useLocation();
 
-  const isDrink = location.pathname === '/drinks';
+  const isDrink = location.pathname.startsWith('/d');
   const DRINK_MEAL = isDrink ? 'Drink' : 'Meal';
   const AS_RECOMEND = isDrink ? 'Meal' : 'Drink';
   const GO_TO_RECOMEND = isDrink ? '/foods/' : '/drinks/';
@@ -24,17 +24,16 @@ function RecipeDetails(props) {
   const [recipe, setRecipe] = useState({});
   const [recomendations, setRecomendations] = useState([{}]);
   const [pageStructure, setPageStructure] = useState({
-    strYoutube: 'watch?v=',
     tegCopyLink: false,
     isFavorite: false,
     continueRecipe: false,
     seeButtonStartR: true,
+    renderVideo: false,
   });
   const [resLocalStorage, setResLocalStorage] = useState({
     doneRecipes: [{ id: false }],
     inProgressRecipes: [{ id: false }],
   });
-
   const goToInProgress = () => {
     history.push(`/drinks/${recipe[`id${DRINK_MEAL}`]}/in-progress`);
   };
@@ -74,24 +73,15 @@ function RecipeDetails(props) {
   };
 
   // verificat como 'receita em progresso' esta add no locaS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-  useEffect(() => {
-    setPageStructure({
-      ...pageStructure,
-      seeButtonStartR: !resLocalStorage.doneRecipes.some(
-        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
-      ),
-      continueRecipe: resLocalStorage.inProgressRecipes.some(
-        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
-      ),
-    });
-  }, [resLocalStorage]);
 
   useEffect(() => {
     const getApi = async () => {
-      const resApi = await getRecipeApi({ id: 52853, WHICH_PAGE: true });
+      const { match: { params: { id } } } = props;
+      const resApi = await getRecipeApi({ id, isDrink });
       setRecipe(Object.values(resApi)[0][0]);
-      const recomendationsApi = Object.values(await getRecomendationApi())[0];
+      const recomendationsApi = Object.values(await getRecomendationApi(isDrink))[0];
       setRecomendations(recomendationsApi.slice(0, GET_6_CARD));
+      setPageStructure({ ...pageStructure, renderVideo: !isDrink });
     };
     getApi();
 
@@ -115,6 +105,18 @@ function RecipeDetails(props) {
     isFavoriteFun();
   }, []);
 
+  useEffect(() => {
+    setPageStructure({
+      ...pageStructure,
+      seeButtonStartR: !resLocalStorage.doneRecipes.some(
+        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
+      ),
+      continueRecipe: resLocalStorage.inProgressRecipes.some(
+        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
+      ),
+    });
+  }, [resLocalStorage]);
+
   return (
     <>
       <Header title="Drinks" haveSearch />
@@ -137,15 +139,12 @@ function RecipeDetails(props) {
           ))}
       </ul>
       <h4 data-testid="instructions">{recipe.strInstructions}</h4>
-      {DRINK_MEAL === 'Meal' && (
+      {pageStructure.renderVideo && (
         <iframe
           width="560"
           height="315"
-          src={ pageStructure.strYoutube.replace('watch?v=', 'embed/') }
+          src={ recipe.strYoutube.replace('watch?v=', 'embed/') }
           title="YouTube video player"
-          frameBorder="0"
-          allow=""
-          allowFullScreen
         />
       )}
       <ul>
@@ -194,5 +193,10 @@ function RecipeDetails(props) {
     </>
   );
 }
+RecipeDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({ id: PropTypes.string }),
+  }).isRequired,
+};
 
 export default RecipeDetails;
