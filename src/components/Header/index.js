@@ -47,7 +47,6 @@ export default function Header({ title, haveSearch }) {
           </div>
         </div>
       )}
-
     </header>
   );
 }

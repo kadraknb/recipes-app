@@ -4,3 +4,4 @@ export { default as FavoriteRecipes } from './FavoriteRecipes';
 export { default as foods } from './foods';
 export { default as Profile } from './Profile';
 export { default as Login } from './Login';
+export { default as RecipeDetails } from './RecipeDetails';
