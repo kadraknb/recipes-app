@@ -1,0 +1,15 @@
+.heightProgress {
+  height: 80px;
+}
+
+.flexProgress {
+  display: flex;
+}
+
+.overText {
+  text-decoration: line-through;
+}
+
+.paddingTopProgress {
+  padding-top: 15px;
+}

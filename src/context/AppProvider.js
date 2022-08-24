@@ -21,6 +21,10 @@ function AppProvider({ children }) {
     password: '',
   });
 
+  // page Progress
+  const [checkbox, setCheckbox] = useState([]);
+  const [recipeDone, setRecipeDone] = useState([]);
+
   // component SearchBar
   const [recipes, setRecipes] = useState([{}]);
 
@@ -42,6 +46,10 @@ function AppProvider({ children }) {
     setRecipes,
     recipeFiltered,
     setRecipeFiltered,
+    checkbox,
+    setCheckbox,
+    recipeDone,
+    setRecipeDone,
   };
 
   return (
