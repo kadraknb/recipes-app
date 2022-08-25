@@ -36,6 +36,7 @@ function FavoriteButton({ info, dataTest }) {
     <button
       data-testid={ dataTest }
       type="button"
+      className="btnFavoritesAndShare"
       onClick={ handleClickFavorite }
       src={ favorited ? Fill : Outline }
       alt="Favorite"

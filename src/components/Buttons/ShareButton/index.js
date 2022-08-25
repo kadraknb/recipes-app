@@ -19,6 +19,7 @@ function ShareButton({ dataTest, path }) {
       <button
         data-testid={ dataTest }
         type="button"
+        className="btnFavoritesAndShare"
         onClick={ handleClickShare }
         src={ shareIcon }
       >
