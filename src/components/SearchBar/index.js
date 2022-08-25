@@ -5,11 +5,14 @@ import AppContext from '../../context/AppContext';
 import getSearchApi from '../../services/getSearchApi';
 
 function SearchBar() {
+  const [search, setSearch] = useState('');
+  const [searchFor, setSearchFor] = useState('');
+  const { setRecipes, setRecipeFiltered } = useContext(AppContext);
   const history = useHistory();
   const location = useLocation();
   const pageDrinks = location.pathname === '/drinks';
-  const SearchFor = pageDrinks ? 'Drink' : 'Meal';
-  const LIMIT = 12;
+  // const SearchFor = pageDrinks ? 'Drink' : 'Meal';
+  // const LIMIT = 12;
 
   const [search, setSearch] = useState('');
   const [searchFor, setSearchFor] = useState('');
@@ -17,9 +20,9 @@ function SearchBar() {
 
   const autoDirection = (res) => {
     setRecipes(res);
-    const newRoute = pageDrinks
-      ? `/drinks/${res[0][`id${SearchFor}`]}`
-      : `/foods/${res[0][`id${SearchFor}`]}`;
+    const newRoute = location.pathname === '/drinks'
+      ? `/drinks/${res[0].idDrink}`
+      : `/foods/${res[0].idMeal}`;
     history.push(newRoute);
   };
 
@@ -29,19 +32,20 @@ function SearchBar() {
     if (searchFor === 'f' && search.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else {
-      const res = Object.values(await getSearchApi({
+      const res = await getSearchApi({
         type: searchFor === 'i' ? 'filter' : 'search',
         searchFor,
         search,
         pageDrinks,
-      }))[0];
+      });
+
       if (!res) {
         global.alert('Sorry, we haven\'t found any recipes for these filters.');
         return;
       }
       const result = res.length === 1
         ? autoDirection
-        : setRecipes;
+        : setRecipeFiltered;
       result(res);
     }
   };
@@ -56,31 +60,34 @@ function SearchBar() {
           onChange={ (e) => setSearch(e.target.value) }
           data-testid="search-input"
         />
-        <label htmlFor="Search">
+        <label htmlFor="i">
           <input
             type="radio"
             name="Search"
             value="i"
+            id="i"
             onChange={ (e) => setSearchFor(e.target.value) }
             data-testid="ingredient-search-radio"
           />
           Ingredient
         </label>
-        <label htmlFor="Search">
+        <label htmlFor="s">
           <input
             type="radio"
             name="Search"
             value="s"
+            id="s"
             onChange={ (e) => setSearchFor(e.target.value) }
             data-testid="name-search-radio"
           />
           Name
         </label>
-        <label htmlFor="Search">
+        <label htmlFor="f">
           <input
             type="radio"
             name="Search"
             value="f"
+            id="f"
             onChange={ (e) => setSearchFor(e.target.value) }
             data-testid="first-letter-search-radio"
           />
@@ -90,7 +97,7 @@ function SearchBar() {
           busca
         </button>
       </form>
-      {recipes.length > 1 && (
+      {/* {recipes.length > 1 && (
         <ul>
           {recipes.slice(0, LIMIT).map((aa, index) => (
             <li
@@ -108,7 +115,7 @@ function SearchBar() {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </>
   );
 }

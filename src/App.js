@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import RecipeInProgress from './components/Progresso';
 import {
   Login,
   foods,
@@ -12,6 +13,7 @@ import {
   FavoriteRecipes,
   RecipeDetails,
 } from './pages';
+
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
       <Route exact path="/drinks" component={ Drinks } />
       <Route exact path="/done-recipes" component={ DoneRecipes } />
       <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
+      <Route exact path="/test" component={ RecipeInProgress } />
       <Route exact path="/profile" component={ Profile } />
     </Switch>
   );
