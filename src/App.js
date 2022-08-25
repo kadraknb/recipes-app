@@ -14,7 +14,6 @@ import {
   RecipeDetails,
 } from './pages';
 
-
 function App() {
   return (
     <Switch>
