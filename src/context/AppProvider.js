@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { node } from 'prop-types';
 import AppContext from './AppContext';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function AppProvider({ children }) {
   // component Recipes
@@ -28,6 +29,9 @@ function AppProvider({ children }) {
   // component SearchBar
   const [recipes, setRecipes] = useState([{}]);
 
+  // page favorite
+  const [favorites, setFavorites] = useLocalStorage('favoriteRecipes', []);
+
   const value = { user,
     setUser,
     toggleBtnLogin,
@@ -50,6 +54,8 @@ function AppProvider({ children }) {
     setCheckbox,
     recipeDone,
     setRecipeDone,
+    favorites,
+    setFavorites,
   };
 
   return (
