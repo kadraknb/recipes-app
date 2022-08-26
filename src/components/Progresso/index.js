@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import CardProgress from '../CardProgress';
-import Footer from '../Footer';
-import Header from '../Header';
+// import Footer from '../Footer';
+// import Header from '../Header';
 
 import './Progress.css';
 import fetchProgress from './fetchProgress';
@@ -25,10 +25,10 @@ function RecipeInProgress() {
 
   return (
     <div className="container flex-column d-flex align-items-center gap ">
-      <Header title="Progress" haveSearch />
+      {/* <Header title="Progress" haveSearch /> */}
       { recipe && <CardProgress recipe={ recipe } /> }
       <div className="heightProgress" />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

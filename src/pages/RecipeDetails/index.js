@@ -7,8 +7,8 @@ import { getRecipeApi, getRecomendationApi } from '../../services/getRecipeApi';
 import shareImg from '../../images/shareIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+// import Header from '../../components/Header';
+// import Footer from '../../components/Footer';
 
 function RecipeDetails(props) {
   const history = useHistory();
@@ -123,7 +123,7 @@ function RecipeDetails(props) {
 
   return (
     <>
-      <Header title="Drinks" haveSearch />
+      {/* <Header title="Drinks" haveSearch /> */}
       <img
         width="300"
         height="300"
@@ -193,7 +193,8 @@ function RecipeDetails(props) {
           <img src={ whiteHeartIcon } alt="white Heart Icon" />
         )}
       </button>
-      <Footer />
+      <div className="heightProgress" />
+      {/* <Footer /> */}
     </>
   );
 }
