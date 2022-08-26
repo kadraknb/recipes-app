@@ -1,10 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import RecipeInProgress from './components/Progresso';
-
 import {
   Login,
   foods,
@@ -13,6 +10,7 @@ import {
   DoneRecipes,
   FavoriteRecipes,
   RecipeDetails,
+  RecipeInProgress,
 } from './pages';
 
 function App() {
