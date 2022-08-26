@@ -7,17 +7,20 @@ function CheckBox({ index, measure, ingredient, id, alreadyDoneAgin }) {
   const [alreadyDone, setAlreadyDone] = useState(false);
   const { checkbox, setCheckbox } = useContext(AppContext);
   useEffect(() => {
-    if (localStorage.getItem('inProgressRecipes')) {
-      const current = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      const filter = current.find((done) => done[id]);
-      if (filter) {
-        // const { [id]: Done } = filter;
-        // setCheckbox([...checkbox, ingredient]);
-        // setAlreadyDone(Done.includes(index));
-        // setToggleClasse(Done.includes(index));
-      }
-    }
-  }, [id, index]);
+    localStorage.getItem('inProgressRecipes');
+
+    // if (localStorage.getItem('inProgressRecipes')) {
+    //   const current = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    //   const filter = current.find((done) => done[id]);
+    //   if (filter) {
+    //     // const { [id]: Done } = filter;
+    //     // setCheckbox([...checkbox, ingredient]);
+    //     // setAlreadyDone(Done.includes(index));
+    //     // setToggleClasse(Done.includes(index));
+    //   }
+    // }
+  // }, [id, index]);
+  }, []);
 
   const verifyLocalStorage = (checked) => {
     if (localStorage.getItem('inProgressRecipes')) {
