@@ -23,7 +23,7 @@ function AppProvider({ children }) {
   });
 
   // page Progress
-  const [checkbox, setCheckbox] = useState([]);
+  const [checkbox, setCheckbox] = useState(false);
   const [recipeDone, setRecipeDone] = useState([]);
 
   // component SearchBar

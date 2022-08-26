@@ -1,45 +1,166 @@
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import AppContext from '../../context/AppContext';
 import getCurrentDate from '../../services/getDate';
-// import RecipeInProgress from '../Progresso';
-import CheckBox from './CheckBox';
 
-const MIN_DRINK = 17;
-const MIN_MEAL = 9;
-const MAX_DRINK = 47;
-const MAX_MEAL = 49;
-const TWENTY = 20;
-// const FOURTEEN = 14;
+import CheckBox from './CheckBox';
+import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import AppContext from '../../context/AppContext';
+
 const FIFTEEN = 15;
-// const TWENTY_NINE = 29;
+const TWENTY = 20;
+
+const copy = require('clipboard-copy');
+
 function CardProgress({ recipe }) {
   const history = useHistory();
-  const MIN = recipe.strDrink ? MIN_DRINK : MIN_MEAL;
-  const MAX = recipe.strDrink ? MAX_DRINK : MAX_MEAL;
-  const MAX_INGREDIENTS = recipe.strDrink ? FIFTEEN : TWENTY;
-  const values = Object.values(recipe).slice(MIN, MAX);
-  const ingredients = values.slice(0, MAX_INGREDIENTS).filter((t) => t && t !== ' ');
-  const measure = values.slice(MAX_INGREDIENTS).filter((t) => t && t !== ' ');
+  const [ingredients, setIngredients] = useState([]);
+  const [measure, setMeasure] = useState([]);
+  const [msg, setMsg] = useState(false);
+  const [boxDone, setBoxDone] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [checkboxStorage, setCheckboxStorage] = useState([]);
+  const { checkbox } = useContext(AppContext);
+  let btn = [];
 
-  const { recipeDone, setRecipeDone } = useContext(AppContext);
+  const [pageStructure, setPageStructure] = useState({
+    tegCopyLink: false,
+    isFavorite: false,
+    continueRecipe: false,
+    seeButtonStartR: true,
+    renderVideo: false,
+  });
 
-  let checkboxStorage = [];
-  if (localStorage.getItem('inProgressRecipes')) {
-    const id = recipe.idDrink ? recipe.idDrink : recipe.idMeal;
-    const current = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const filter = current.find((done) => done[id]);
-    if (filter) {
-      const { [id]: Done } = filter;
-      checkboxStorage = Done;
+  useEffect(() => {
+    let ingredientOnly = [];
+    let measureOnly = [];
+    const max = recipe.strDrink ? FIFTEEN : TWENTY;
+    for (let index = 1; index < max; index += 1) {
+      const ingredientString = `strIngredient${index}`;
+      const measureString = `strMeasure${index}`;
+      if (recipe[ingredientString] && recipe[ingredientString] !== ' ') {
+        ingredientOnly = [...ingredientOnly, recipe[ingredientString]];
+      }
+      if (recipe[measureString] && recipe[measureString] !== ' ') {
+        measureOnly = [...measureOnly, recipe[measureString]];
+      }
+      if (!localStorage.getItem('doneRecipes')) {
+        localStorage.setItem('doneRecipes', JSON.stringify([]));
+      }
     }
-  }
+    setIngredients(ingredientOnly);
+    setMeasure(measureOnly);
+  }, []);
+
+  const toLocalStorageFunc = (toLocalStorage) => {
+    const doneRecipesStorage = JSON.parse(localStorage.getItem('doneRecipes'));
+    const toStorage = [...doneRecipesStorage, toLocalStorage];
+    localStorage.setItem('doneRecipes', JSON.stringify(toStorage));
+    history.push('/done-recipes');
+  };
 
   const finishButtonClick = () => {
-    const addDate = { ...recipe, date: getCurrentDate() };
-    setRecipeDone([...recipeDone, addDate]);
-    history.push('/done-recipes');
+    // const tags = Array.isArray(recipe.strTags) ? [...recipe.strTags] : recipe.strTags;
+    const recipeDoneToLocalStorage = {
+      id: recipe.idDrink ? recipe.idDrink : recipe.idMeal,
+      type: recipe.idDrink ? 'drink' : 'food',
+      nationality: recipe.idDrink ? '' : recipe.strArea,
+      category: recipe.idDrink ? recipe.strCategory : '',
+      alcoholicOrNot: recipe.idMeal ? '' : recipe.strAlcoholic,
+      name: recipe.idDrink ? recipe.strDrink : recipe.strMeal,
+      image: recipe.idDrink ? recipe.strDrinkThumb : recipe.strMealThumb,
+      doneDate: getCurrentDate(),
+      tags: recipe.idDrink ? '' : recipe.strTags.split(','),
+    };
+    toLocalStorageFunc(recipeDoneToLocalStorage);
+  };
+
+  const buttonF = () => (
+    <button
+      data-testid="finish-recipe-btn"
+      className="btn btn-outline-success"
+      type="button"
+      onClick={ finishButtonClick }
+      disabled={ checkboxStorage.length !== ingredients.length }
+    >
+      Finish recipe
+
+    </button>
+  );
+  btn = buttonF();
+
+  useEffect(() => {
+    if (localStorage.getItem('inProgressRecipes')) {
+      const id = recipe.idDrink ? recipe.idDrink : recipe.idMeal;
+      const current = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const filter = current.find((done) => done[id]);
+      if (filter) {
+        console.log(filter[id]);
+        // const { [id]: Done } = filter;
+        setCheckboxStorage(filter[id]);
+      }
+      // console.log(Done);
+      btn = buttonF();
+    }
+  }, [checkbox]);
+
+  const handleShareButton = () => {
+    const url = recipe.strMeal ? `http://localhost:3000/foods/${recipe.idMeal}`
+      : `http://localhost:3000/drinks/${recipe.idDrink}`;
+    copy(url);
+    setMsg(true);
+    const ONE_SECOND = 1000;
+    setTimeout(() => {
+      setMsg(false);
+    }, ONE_SECOND);
+    // global.alert('Link copied!');
+  };
+
+  const id = recipe.idDrink ? recipe.idDrink : recipe.idMeal;
+  useEffect(() => {
+    if (localStorage.getItem('inProgressRecipes')) {
+      const current = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      const filter = current.find((done) => done[id]);
+      if (filter) {
+        const { [id]: Done } = filter;
+        setBoxDone(Done);
+      }
+    }
+    if (localStorage.getItem('favoriteRecipes')) {
+      const current = JSON.parse(localStorage.getItem('favoriteRecipes'));
+      const filter = current.find((done) => done.id === id);
+      if (filter) {
+        setIsFavorite(!isFavorite);
+      }
+    }
+  }, []);
+
+  const addFavoriteLocalS = () => {
+    const DRINK_MEAL = recipe.idDrink ? 'Drink' : 'Meal';
+    setPageStructure({ ...pageStructure, isFavorite: !pageStructure.isFavorite });
+    setIsFavorite(!isFavorite);
+    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    if (pageStructure.isFavorite) {
+      const removFavorite = favoriteRecipes.filter(
+        (favorite) => favorite.id !== recipe[`id${DRINK_MEAL}`],
+      );
+      localStorage.setItem('favoriteRecipes', JSON.stringify(removFavorite));
+    } else {
+      const newFavoriteRecipes = [
+        ...favoriteRecipes,
+        {
+          id: recipe[`id${DRINK_MEAL}`],
+          type: recipe.idDrink ? 'drink' : 'food',
+          nationality: recipe.idDrink ? '' : recipe.strArea,
+          category: recipe.strCategory,
+          alcoholicOrNot: recipe.idMeal ? '' : recipe.strAlcoholic,
+          name: recipe[`str${DRINK_MEAL}`],
+          image: recipe[`str${DRINK_MEAL}Thumb`],
+        },
+      ];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
+    }
   };
 
   return (
@@ -60,36 +181,44 @@ function CardProgress({ recipe }) {
         {recipe.strDrink ? recipe.strAlcoholic : recipe.strCategory}
 
       </h4>
+      <div>
+        { msg && <span>Link copied!</span>}
+
+      </div>
       <div className="flexProgress gap">
         <button
           data-testid="share-btn"
           type="button"
           className="btn btn-outline-primary btn-sm"
+          onClick={ handleShareButton }
         >
           share
 
         </button>
         <button
-          data-testid="favorite-btn"
           type="button"
-          className="btn btn-outline-danger btn-sm"
+          onClick={ addFavoriteLocalS }
         >
-          favorite
-
+          <img
+            data-testid="favorite-btn"
+            src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+            alt="black Heart Icon"
+          />
         </button>
       </div>
 
       <section className="flex container paddingTopProgress ">
         <h3 className="h3">Ingredients</h3>
-        { ingredients.map((ingredient, index) => (<CheckBox
+
+        { ingredients.length && ingredients.map((ingredient, index) => (<CheckBox
           key={ index }
           ingredient={ ingredient }
           ingredients={ ingredients }
           index={ index }
           measure={ measure }
+          alreadyDoneAgin={ boxDone.includes(index) }
           id={ recipe.idDrink ? recipe.idDrink : recipe.idMeal }
         />))}
-
       </section>
       <section>
         <p
@@ -97,18 +226,8 @@ function CardProgress({ recipe }) {
           className="flex container "
         >
           {recipe.strInstructions}
-
         </p>
-        <button
-          data-testid="finish-recipe-btn"
-          className="btn btn-outline-success"
-          type="button"
-          onClick={ finishButtonClick }
-          disabled={ checkboxStorage.length !== ingredients.length }
-        >
-          Finish recipe
-
-        </button>
+        { btn }
       </section>
     </>
   );

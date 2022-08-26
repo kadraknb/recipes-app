@@ -106,15 +106,19 @@ function RecipeDetails(props) {
   }, []);
 
   useEffect(() => {
-    setPageStructure({
-      ...pageStructure,
-      seeButtonStartR: !resLocalStorage.doneRecipes.some(
-        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
-      ),
-      continueRecipe: resLocalStorage.inProgressRecipes.some(
-        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
-      ),
-    });
+    try {
+      setPageStructure({
+        ...pageStructure,
+        seeButtonStartR: !resLocalStorage.doneRecipes.some(
+          ({ id }) => id === recipe[`id${DRINK_MEAL}`],
+        ),
+        continueRecipe: resLocalStorage.inProgressRecipes.some(
+          ({ id }) => id === recipe[`id${DRINK_MEAL}`],
+        ),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }, [resLocalStorage]);
 
   return (
