@@ -9,7 +9,16 @@ import AppContext from '../../context/AppContext';
 export default function DoneRecipes() {
   const [filterDone, setFilterDone] = useState('all');
   const [filterApplied, setFilterApplied] = useState([]);
-  const { recipeDone } = useContext(AppContext);
+  const { recipeDone, setRecipeDone } = useContext(AppContext);
+
+  useEffect(() => {
+    if (localStorage.getItem('doneRecipes')) {
+      const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+      setRecipeDone(doneRecipes);
+      // setFilterApplied(doneRecipes);
+      // console.log(doneRecipes);
+    }
+  }, [setRecipeDone]);
 
   useEffect(() => {
     const resultFilter = recipeDone.filter((recipe) => {
@@ -17,18 +26,18 @@ export default function DoneRecipes() {
         return true;
       }
       if (filterDone === 'idMeal') {
-        return filterDone in recipe;
+        return recipe.type === 'food';
       }
-      return filterDone in recipe;
+      return recipe.type === 'drink';
     });
-    console.log(resultFilter);
     setFilterApplied(resultFilter);
-  }, [filterDone]);
+  }, [filterDone, recipeDone]);
 
   const history = useHistory();
   const test = () => {
     history.push('/test');
   };
+  // console.log(filterApplied);
 
   return (
     <section className="flex">
@@ -64,8 +73,7 @@ export default function DoneRecipes() {
       <div className="flex">
 
         {
-
-          filterApplied && filterApplied.map((recipe, index) => (
+          filterApplied.length && filterApplied.map((recipe, index) => (
 
             <CardDone
               key={ index }

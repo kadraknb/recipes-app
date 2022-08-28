@@ -14,10 +14,6 @@ function SearchBar() {
   // const SearchFor = pageDrinks ? 'Drink' : 'Meal';
   // const LIMIT = 12;
 
-  const [search, setSearch] = useState('');
-  const [searchFor, setSearchFor] = useState('');
-  const { recipes, setRecipes } = useContext(AppContext);
-
   const autoDirection = (res) => {
     setRecipes(res);
     const newRoute = location.pathname === '/drinks'

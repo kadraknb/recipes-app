@@ -131,4 +131,3 @@ RecipeButton.propTypes = {
   DRINK_MEAL: PropTypes.string.isRequired,
 };
 export default RecipeButton;
- 

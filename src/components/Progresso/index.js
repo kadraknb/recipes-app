@@ -1,31 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import CardProgress from '../CardProgress';
-import Footer from '../Footer';
-import Header from '../Header';
-// import { useParams } from 'react-router-dom';
+// import Footer from '../Footer';
+// import Header from '../Header';
 
 import './Progress.css';
-import mockProgressTest from '../../tests/mocks/mocktestProgress';
+import fetchProgress from './fetchProgress';
+// import mockProgressTest from '../../tests/mocks/mocktestProgress';
 
 function RecipeInProgress() {
-  const [recipe, setRecipe] = useState({});
-  // const [ingredients, setIngredients] = useState([]);
+  const { id } = useParams();
+  const [recipe, setRecipe] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
-    const found = mockProgressTest.find((rec) => (rec.idDrink
-      ? rec.idDrink === '52977'
-      : rec.idMeal === '52977'));
-    setRecipe(found);
-    console.log(found);
+    const getRecipe = async () => {
+      const isFood = history.location.pathname.includes('foods');
+      const found = await fetchProgress(id, isFood);
+      setRecipe(found);
+    };
+    getRecipe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="container flex-column d-flex align-items-center gap ">
-      <Header title="Progress" haveSearch />
+      {/* <Header title="Progress" haveSearch /> */}
       { recipe && <CardProgress recipe={ recipe } /> }
       <div className="heightProgress" />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

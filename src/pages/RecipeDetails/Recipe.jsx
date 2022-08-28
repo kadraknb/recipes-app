@@ -49,4 +49,3 @@ Recipe.propTypes = {
   }).isRequired,
 };
 export default Recipe;
- 
