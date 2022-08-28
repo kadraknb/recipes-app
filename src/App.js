@@ -38,7 +38,7 @@ function App() {
   );
 }
 
-// <Route path="/album/:id" render={ (props) => <Album { ...props } /> } />
+// <Route path="/album/:id" render={ (props) => <Album {...props } /> } />
 // const { match: { params: { id } } } = this.props;
 
 export default App;
