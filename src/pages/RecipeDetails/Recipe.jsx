@@ -12,13 +12,15 @@ function Recipe({ props: { DRINK_MEAL, pageStructure, recipe } }) {
         data-testid="recipe-photo"
       />
       <h2 data-testid="recipe-title">{recipe[`str${DRINK_MEAL}`]}</h2>
-      <p data-testid="recipe-category">{recipe.strCategory}</p>
+      <p data-testid="recipe-category">
+        {DRINK_MEAL === 'Meal' ? recipe.strCategory : recipe.strAlcoholic}
+      </p>
       <ul>
         {Object.entries(recipe)
           .filter((aa) => aa[0].includes('strIngredient') && aa[1])
           .map(([key, Ingredient], index) => (
             <li key={ key } data-testid={ `${index}-ingredient-name-and-measure` }>
-              {Ingredient}
+              {`${Ingredient} ${recipe[`strMeasure${index + 1}`]}`}
             </li>
           ))}
       </ul>
@@ -29,6 +31,7 @@ function Recipe({ props: { DRINK_MEAL, pageStructure, recipe } }) {
           height="315"
           src={ recipe.strYoutube.replace('watch?v=', 'embed/') }
           title="YouTube video player"
+          data-testid="video"
         />
       )}
     </>
@@ -45,6 +48,7 @@ Recipe.propTypes = {
       strCategory: PropTypes.string,
       strInstructions: PropTypes.string,
       strYoutube: PropTypes.string,
+      strAlcoholic: PropTypes.string,
     }),
   }).isRequired,
 };

@@ -7,32 +7,26 @@ import shareImg from '../../images/shareIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 
-function RecipeButton({ goToInProgress, recipe, DRINK_MEAL }) {
+function RecipeButton({ goToInProgress, recipe, DRINK_MEAL, id, isDrink }) {
   const history = useHistory();
 
+  const DRINK_OR_MEAL = isDrink ? 'cocktails' : 'meals';
+  const DRINK_OR_FOOD = isDrink ? 'drink' : 'food';
   const TWO_SECONDS = 2000;
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) || [];
 
-  const [resLocalStorage, setResLocalStorage] = useState({ inProgressRecipes: [{}] });
   const [pageStructure, setPageStructure] = useState({
     tegCopyLink: false,
     isFavorite: false,
     continueRecipe: false,
-    seeButtonStartR: true,
+    seeButtonStartR: !doneRecipes.some((aa) => aa.id === id),
   });
 
   useEffect(() => {
-    const getLocalStorage = () => {
-      const inProgressRecipes = localStorage.getItem('inProgressRecipes');
-      setResLocalStorage({
-        inProgressRecipes: inProgressRecipes || [{}],
-      });
-    };
-    getLocalStorage();
-
     const isFavoriteFun = () => {
       const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
       const isFavorite = favoriteRecipes.some(
-        ({ id }) => id === recipe[`id${DRINK_MEAL}`],
+        (aa) => Number(aa.id) === Number(id),
       );
       setPageStructure({ ...pageStructure, isFavorite });
     };
@@ -40,19 +34,16 @@ function RecipeButton({ goToInProgress, recipe, DRINK_MEAL }) {
   }, []);
 
   useEffect(() => {
-    const getInProgressRecipesLS = resLocalStorage.inProgressRecipes.find(
-      (obReceita) => Number(Object.keys(obReceita)) === Number(recipe[`id${DRINK_MEAL}`]),
-    );
-    if (getInProgressRecipesLS) {
-      const amountOfIngredients = Object.entries(recipe)
-        .filter((aa) => aa[0].includes('strIngredient') && aa[1]).length;
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
-      const continueRecipe = Object.values(getInProgressRecipesLS)[0]
-        .length === amountOfIngredients;
+    if (inProgressRecipes) {
+      const getInProgressRecipesLS = Object
+        .entries(inProgressRecipes[DRINK_OR_MEAL])
+        .find(([aa]) => (Number(aa) === Number(id)));
+
       setPageStructure({
         ...pageStructure,
-        seeButtonStartR: !continueRecipe,
-        continueRecipe,
+        continueRecipe: Boolean(getInProgressRecipesLS),
       });
     }
   }, [recipe]);
@@ -79,10 +70,10 @@ function RecipeButton({ goToInProgress, recipe, DRINK_MEAL }) {
         ...favoriteRecipes,
         {
           id: recipe[`id${DRINK_MEAL}`],
-          type: DRINK_MEAL,
-          nationality: recipe.strArea,
+          type: DRINK_OR_FOOD,
+          nationality: recipe.strArea || '',
           category: recipe.strCategory,
-          alcoholicOrNot: DRINK_MEAL === 'Meal' ? 'Non alcoholic' : recipe.strAlcoholic,
+          alcoholicOrNot: DRINK_MEAL === 'Meal' ? '' : recipe.strAlcoholic,
           name: recipe[`str${DRINK_MEAL}`],
           image: recipe[`str${DRINK_MEAL}Thumb`],
         },
@@ -98,18 +89,24 @@ function RecipeButton({ goToInProgress, recipe, DRINK_MEAL }) {
           type="button"
           onClick={ () => history.push(goToInProgress) }
           data-testid="start-recipe-btn"
+          className="fixed-bottom"
         >
           {pageStructure.continueRecipe ? 'Continue Recipe' : 'Start Recipe'}
         </button>
       )}
       {pageStructure.tegCopyLink && <p>Link copied!</p>}
-      <button type="button" onClick={ clickButtonShare } data-testid="share-btn">
+      <button
+        type="button"
+        onClick={ clickButtonShare }
+        data-testid="share-btn"
+      >
         <img src={ shareImg } alt="shareIcon" />
       </button>
       <button
         type="button"
         onClick={ addFavoriteLocalS }
         data-testid="favorite-btn"
+        src={ pageStructure.isFavorite ? blackHeartIcon : whiteHeartIcon }
       >
         {pageStructure.isFavorite ? (
           <img src={ blackHeartIcon } alt="black Heart Icon" />
@@ -129,5 +126,8 @@ RecipeButton.propTypes = {
     strAlcoholic: PropTypes.string,
   }).isRequired,
   DRINK_MEAL: PropTypes.string.isRequired,
+  isDrink: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
 };
+
 export default RecipeButton;
