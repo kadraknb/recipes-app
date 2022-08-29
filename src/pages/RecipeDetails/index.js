@@ -38,7 +38,6 @@ function RecipeDetails({ match: { params: { id } } }) {
 
   return (
     <>
-      <Header title={ DRINK_MEAL } haveSearch />
       <Recipe props={ { DRINK_MEAL, pageStructure, recipe } } />
       {pageStructure.readyRender && (
         <RecomendCarousel props={ { recomendations, isDrink } } />
@@ -52,7 +51,6 @@ function RecipeDetails({ match: { params: { id } } }) {
       />
       <hr />
       <hr />
-      <Footer />
     </>
   );
 }

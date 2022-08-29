@@ -57,7 +57,7 @@ function RecomendCarousel({ props: { recomendations, isDrink } }) {
 }
 RecomendCarousel.propTypes = {
   props: PropTypes.shape({
-    recomendations: PropTypes.arrayOf(PropTypes.object),
+    recomendations: PropTypes.arrayOf(PropTypes.shape({})),
     isDrink: PropTypes.bool,
   }).isRequired,
 };
